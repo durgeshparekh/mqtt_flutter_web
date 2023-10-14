@@ -10,13 +10,12 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.put(DashboardController());
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('MQTT'),
-      ),
+      appBar: AppBar(title: const Text('MQTT')),
       body: Column(
         children: [
-          Obx(
-            () => ExpansionTile(
+          Obx(() {
+            debugPrint('brokerConnected: ${controller.brokerConnected.value}');
+            return ExpansionTile(
               title: Row(
                 children: [
                   CircleAvatar(
@@ -68,7 +67,8 @@ class DashboardScreen extends StatelessWidget {
                               child: TextFormField(
                                 controller: controller.passwordController,
                                 decoration: const InputDecoration(
-                                    labelText: 'Password'),
+                                  labelText: 'Password',
+                                ),
                               ),
                             ),
                           ),
@@ -87,8 +87,8 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          ),
+            );
+          }),
           ListTile(
             title: Padding(
               padding: const EdgeInsets.all(20.0),

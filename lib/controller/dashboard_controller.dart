@@ -15,15 +15,22 @@ class DashboardController extends GetxController {
   // nO1cANsTOPuS
   // "d\$2N@8p&1V#1"
 
-  void connectToBroker(){
-    mqttController.initializeAndConnect(
-      hostName: "ws://test.smartnode.in/mqtt",
-      portNumber: 8083,
-      keepAliveTime: 10,
-      clientId: clientIdController.text,
-      username: usernameController.text,
-      password: passwordController.text,
-    );
+  Future<void> connectToBroker() async {
+    if (brokerConnected.isFalse) {
+      mqttController.initializeAndConnect(
+        hostName: "ws://test.smartnode.in/mqtt",
+        portNumber: 8083,
+        keepAliveTime: 10,
+        clientId: clientIdController.text,
+        username: usernameController.text,
+        password: passwordController.text,
+      );
+      brokerConnected.value = await mqttController.onConnected();
+    } else {
+      mqttController
+          .disconnect()
+          .then((value) => brokerConnected.value = false);
+    }
   }
 
   publishMessage() {

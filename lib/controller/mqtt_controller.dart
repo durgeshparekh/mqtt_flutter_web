@@ -1,11 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
 import 'package:mqtt_client/mqtt_browser_client.dart';
 import 'package:mqtt_client/mqtt_client.dart';
-
-import 'dashboard_controller.dart';
 
 class MQTTController {
   MqttBrowserClient? mqttBrowserClient;
@@ -35,12 +32,10 @@ class MQTTController {
 
     mqttBrowserClient!.websocketProtocols =
         MqttClientConstants.protocolsSingleDefault;
-    mqttBrowserClient!.onConnected = onConnected;
+    
     mqttBrowserClient!.onSubscribed = onSubscribed;
     mqttBrowserClient!.onUnsubscribed = onUnSubscribed;
     mqttBrowserClient!.onDisconnected = onDisconnected;
-
-    // var controller = Get.find<DashboardController>();
 
     MqttConnectMessage connMessage = MqttConnectMessage()
         .withClientIdentifier(clientId)
@@ -50,16 +45,31 @@ class MQTTController {
     mqttBrowserClient!.connectionMessage = connMessage;
 
     try {
-      await mqttBrowserClient!.connect(username, password);
+      await mqttBrowserClient!.connect(username, password).then((value) {
+        var connectionStatus = value!.state;
+        if (connectionStatus == MqttConnectionState.connected) {
+          startListeningMessages();
+
+          mqttBrowserClient!.onConnected = onConnected;
+        }
+      });
     } catch (e) {
       debugPrint('EXAMPLE::client exception - $e');
       mqttBrowserClient!.disconnect();
     }
   }
 
+  bool isConnectedToBroker() {
+    bool isConnected = false;
+    if (mqttBrowserClient!.connectionStatus != null) {
+      isConnected = mqttBrowserClient!.connectionStatus!.state ==
+          MqttConnectionState.connected;
+    }
+    return isConnected;
+  }
+
   Future onConnected() async {
     debugPrint("connected successfully");
-    DashboardController().brokerConnected.value = true;
   }
 
   Future onSubscribed(String topic) async {
@@ -72,8 +82,8 @@ class MQTTController {
 
   Future onDisconnected() async {
     debugPrint("disconnected");
-    
-    DashboardController().brokerConnected.value = false;
+
+    return true;
   }
 
   Future publishMessage({
@@ -111,4 +121,15 @@ class MQTTController {
   }
 
   Future<void> disconnect() async => mqttBrowserClient!.disconnect();
+
+  void startListeningMessages() {
+    mqttBrowserClient!.updates!
+        .listen((List<MqttReceivedMessage<MqttMessage>> c) async {
+      final MqttPublishMessage? recMess = c[0].payload as MqttPublishMessage?;
+      final String receivedMessage =
+          MqttPublishPayload.bytesToStringAsString(recMess!.payload.message);
+      // _currentState.setReceivedText(recMess.toString());
+      debugPrint(receivedMessage);
+    });
+  }
 }
