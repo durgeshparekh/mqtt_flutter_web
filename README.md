@@ -1,16 +1,15 @@
 # mqtt_flutter_web
 
-A new Flutter project.
+Command to run project with local ip
 
-## Getting Started
+flutter run -d web-server --web-hostname <your_local_ip_address> --web-port <desired_port>
 
-This project is a starting point for a Flutter application.
+How to setup broker
 
-A few resources to get you started if this is your first Flutter project:
+1. Download broker from EMQx.
+https://www.emqx.io/downloads
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. Follow the setup steps that describes in download page
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. To use mqtt public
+https://www.emqx.com/en/mqtt/public-mqtt5-broker
