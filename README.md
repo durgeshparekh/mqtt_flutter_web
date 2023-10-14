@@ -13,3 +13,12 @@ https://www.emqx.io/downloads
 
 3. To use mqtt public
 https://www.emqx.com/en/mqtt/public-mqtt5-broker
+
+
+Connect with me
+
+Medium: https://medium.com/@durgeshparekh381
+Github: https://github.com/durgeshparekh
+LinkedIn: https://www.linkedin.com/in/durgesh-parekh/
+Instagram: https://www.instagram.com/durgesh_parekh96/
+
