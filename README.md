@@ -15,10 +15,10 @@ https://www.emqx.io/downloads
 https://www.emqx.com/en/mqtt/public-mqtt5-broker
 
 
-Connect with me
+# Connect with me
 
-Medium: https://medium.com/@durgeshparekh381
-Github: https://github.com/durgeshparekh
-LinkedIn: https://www.linkedin.com/in/durgesh-parekh/
-Instagram: https://www.instagram.com/durgesh_parekh96/
+- Medium: https://medium.com/@durgeshparekh381
+- Github: https://github.com/durgeshparekh
+- LinkedIn: https://www.linkedin.com/in/durgesh-parekh/
+- Instagram: https://www.instagram.com/durgesh_parekh96/
 
