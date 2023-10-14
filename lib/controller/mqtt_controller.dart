@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mqtt_client/mqtt_browser_client.dart';
 import 'package:mqtt_client/mqtt_client.dart';
@@ -71,10 +72,12 @@ class MQTTController {
 
   Future onSubscribed(String topic) async {
     debugPrint("subscribed on topic: $topic");
+    Fluttertoast.showToast(msg: 'Subscribed on topic: $topic');
   }
 
   Future onUnSubscribed(String? topic) async {
     debugPrint("unsubscribed on topic: $topic");
+    Fluttertoast.showToast(msg: 'Unsubscribed on topic: $topic');
   }
 
   Future onDisconnected() async {
