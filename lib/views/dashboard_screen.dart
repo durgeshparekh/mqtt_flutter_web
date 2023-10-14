@@ -15,71 +15,79 @@ class DashboardScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          ExpansionTile(
-            title: Row(
+          Obx(
+            () => ExpansionTile(
+              title: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 10,
+                    backgroundColor: controller.brokerConnected.isTrue
+                        ? Colors.green
+                        : Colors.red,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    controller.brokerConnected.isTrue
+                        ? 'Connected'
+                        : 'Not connected',
+                  ),
+                ],
+              ),
+              initiallyExpanded: true,
               children: [
-                CircleAvatar(
-                  radius: 10,
-                  backgroundColor: controller.brokerConnected.isTrue
-                      ? Colors.green
-                      : Colors.red,
+                Form(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: TextFormField(
+                                controller: controller.clientIdController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Client ID',
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: TextFormField(
+                                controller: controller.usernameController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Username',
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: TextFormField(
+                                controller: controller.passwordController,
+                                decoration: const InputDecoration(
+                                    labelText: 'Password'),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        onPressed: () => controller.connectToBroker(),
+                        icon: Icon(
+                          Icons.power_settings_new,
+                          color: controller.brokerConnected.isTrue
+                              ? Colors.red
+                              : Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(width: 10),
-                const Text('Not connected'),
               ],
             ),
-            initiallyExpanded: controller.brokerConnected.isTrue ? false : true,
-            children: [
-              Form(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: TextFormField(
-                              controller: controller.clientIdController,
-                              decoration:
-                                  const InputDecoration(labelText: 'Client ID'),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: TextFormField(
-                              controller: controller.usernameController,
-                              decoration:
-                                  const InputDecoration(labelText: 'Username'),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: TextFormField(
-                              controller: controller.passwordController,
-                              decoration:
-                                  const InputDecoration(labelText: 'Password'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () => controller.connectToBroker(),
-                      icon: Icon(
-                        Icons.power_settings_new,
-                        color: controller.brokerConnected.isTrue
-                            ? Colors.red
-                            : Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
           ),
           ListTile(
             title: Padding(
@@ -90,9 +98,7 @@ class DashboardScreen extends StatelessWidget {
               ),
             ),
             trailing: MaterialButton(
-              onPressed: () {
-                controller.subScribeToTopic();
-              },
+              onPressed: () => controller.subScribeToTopic(),
               child: const Text('Subscribe'),
             ),
           )

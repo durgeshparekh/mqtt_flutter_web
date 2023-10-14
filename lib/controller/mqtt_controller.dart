@@ -45,9 +45,6 @@ class MQTTController {
     MqttConnectMessage connMessage = MqttConnectMessage()
         .withClientIdentifier(clientId)
         .withWillQos(MqttQos.exactlyOnce)
-        // .withWillRetain()
-        // .withWillMessage(
-        //     'After my death I will give all my property in charity')
         .startClean();
 
     mqttBrowserClient!.connectionMessage = connMessage;
@@ -61,8 +58,8 @@ class MQTTController {
   }
 
   Future onConnected() async {
-    var controller = Get.find<DashboardController>();
-    controller.brokerConnected.value = true;
+    debugPrint("connected successfully");
+    DashboardController().brokerConnected.value = true;
   }
 
   Future onSubscribed(String topic) async {
@@ -74,8 +71,9 @@ class MQTTController {
   }
 
   Future onDisconnected() async {
-    var controller = Get.find<DashboardController>();
-    controller.brokerConnected.value = false;
+    debugPrint("disconnected");
+    
+    DashboardController().brokerConnected.value = false;
   }
 
   Future publishMessage({
