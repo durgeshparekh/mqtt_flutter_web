@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mqtt_client/mqtt_browser_client.dart';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_flutter_web/controller/dashboard_controller.dart';
 
 class MQTTController {
   MqttBrowserClient? mqttBrowserClient;
@@ -20,8 +23,6 @@ class MQTTController {
     String? username,
     String? password,
   }) async {
-    debugPrint(
-        'clientId: $clientId, username: $username, password: $password, portNumber: $portNumber, host: $hostName, keepAlive: $keepAliveTime');
     mqttBrowserClient = MqttBrowserClient(
       hostName,
       clientId!,
@@ -32,10 +33,6 @@ class MQTTController {
 
     mqttBrowserClient!.websocketProtocols =
         MqttClientConstants.protocolsSingleDefault;
-    
-    mqttBrowserClient!.onSubscribed = onSubscribed;
-    mqttBrowserClient!.onUnsubscribed = onUnSubscribed;
-    mqttBrowserClient!.onDisconnected = onDisconnected;
 
     MqttConnectMessage connMessage = MqttConnectMessage()
         .withClientIdentifier(clientId)
@@ -45,14 +42,13 @@ class MQTTController {
     mqttBrowserClient!.connectionMessage = connMessage;
 
     try {
-      await mqttBrowserClient!.connect(username, password).then((value) {
-        var connectionStatus = value!.state;
-        if (connectionStatus == MqttConnectionState.connected) {
-          startListeningMessages();
+      await mqttBrowserClient!.connect(username, password);
+      mqttBrowserClient!.onConnected = onConnected;
+      mqttBrowserClient!.onSubscribed = onSubscribed;
+      mqttBrowserClient!.onUnsubscribed = onUnSubscribed;
+      mqttBrowserClient!.onDisconnected = onDisconnected;
 
-          mqttBrowserClient!.onConnected = onConnected;
-        }
-      });
+      startListeningMessages();
     } catch (e) {
       debugPrint('EXAMPLE::client exception - $e');
       mqttBrowserClient!.disconnect();
@@ -70,6 +66,7 @@ class MQTTController {
 
   Future onConnected() async {
     debugPrint("connected successfully");
+    return true;
   }
 
   Future onSubscribed(String topic) async {
@@ -95,7 +92,7 @@ class MQTTController {
     try {
       mqttBrowserClient!.publishMessage(
         topic,
-        MqttQos.exactlyOnce,
+        MqttQos.atMostOnce,
         builder.payload!,
       );
     } catch (e) {
@@ -107,7 +104,6 @@ class MQTTController {
     MqttSubscriptionStatus status =
         mqttBrowserClient!.getSubscriptionsStatus(topic);
     if (status == MqttSubscriptionStatus.doesNotExist) {
-      debugPrint("topic :$topic");
       mqttBrowserClient!.subscribe(topic, MqttQos.atLeastOnce);
     }
   }
@@ -128,8 +124,11 @@ class MQTTController {
       final MqttPublishMessage? recMess = c[0].payload as MqttPublishMessage?;
       final String receivedMessage =
           MqttPublishPayload.bytesToStringAsString(recMess!.payload.message);
-      // _currentState.setReceivedText(recMess.toString());
-      debugPrint(receivedMessage);
+      // Get the YourController instance
+      DashboardController dashboardController = Get.find<DashboardController>();
+      // Call the method to handle the message
+      dynamic object = {"topic": c[0].topic, "message": receivedMessage};
+      dashboardController.handleMessage(json.encode(object));
     });
   }
 }

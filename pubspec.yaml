@@ -38,6 +38,7 @@ dependencies:
   mqtt_client: ^9.8.0
   get: ^4.6.6
   build_runner: ^2.4.6
+  fluttertoast: ^8.2.2
 
 dev_dependencies:
   flutter_test:

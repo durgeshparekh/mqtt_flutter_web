@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mqtt_flutter_web/controller/mqtt_controller.dart';
 
@@ -8,34 +9,45 @@ class DashboardController extends GetxController {
   var passwordController = TextEditingController();
   var topicController = TextEditingController();
   var messageController = TextEditingController();
+  var publishTopicController = TextEditingController();
 
   var brokerConnected = false.obs;
+  var receivedMessage = ''.obs;
+  var messageList = [].obs;
   var mqttController = MQTTController();
 
-  // nO1cANsTOPuS
-  // "d\$2N@8p&1V#1"
-
   Future<void> connectToBroker() async {
-    if (brokerConnected.isFalse) {
-      mqttController.initializeAndConnect(
-        hostName: "ws://test.smartnode.in/mqtt",
-        portNumber: 8083,
-        keepAliveTime: 10,
-        clientId: clientIdController.text,
-        username: usernameController.text,
-        password: passwordController.text,
+    if (clientIdController.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Client Id should not be empty',
+        gravity: ToastGravity.CENTER,
+        textColor: Colors.black,
+        webPosition: "center",
+        webBgColor: "#b2dfdb",
+        timeInSecForIosWeb: 2,
       );
-      brokerConnected.value = await mqttController.onConnected();
     } else {
-      mqttController
-          .disconnect()
-          .then((value) => brokerConnected.value = false);
+      if (brokerConnected.isFalse) {
+        mqttController.initializeAndConnect(
+          hostName: "ws://test.smartnode.in/mqtt",
+          portNumber: 8083,
+          keepAliveTime: 10,
+          clientId: clientIdController.text,
+          username: usernameController.text,
+          password: passwordController.text,
+        );
+        brokerConnected.value = await mqttController.onConnected();
+      } else {
+        mqttController
+            .disconnect()
+            .then((value) => brokerConnected.value = false);
+      }
     }
   }
 
   publishMessage() {
     mqttController.publishMessage(
-      topic: topicController.text,
+      topic: publishTopicController.text,
       publishMessage: messageController.text,
     );
   }
@@ -46,5 +58,13 @@ class DashboardController extends GetxController {
 
   void unSubscribeToTopic() {
     mqttController.unSubscribeToMQTT(topic: topicController.text);
+    topicController.clear();
+  }
+
+  void handleMessage(dynamic message) {
+    // Handle the received message here
+    debugPrint('Received message in Dashboard: $message');
+    // receivedMessage.value = '$topic: $message';
+    messageList.add(message);
   }
 }
