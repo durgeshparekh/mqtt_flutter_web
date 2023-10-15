@@ -14,6 +14,9 @@ https://www.emqx.io/downloads
 3. To use mqtt public
 https://www.emqx.com/en/mqtt/public-mqtt5-broker
 
+# PPT slide update:
+- https://docs.google.com/presentation/d/18LUEMP1FgFoqcyCAHObIW0Y94tKRN1r85WiQZ_HIahA/edit?usp=sharing
+
 
 # Connect with me
 
