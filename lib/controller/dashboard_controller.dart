@@ -29,8 +29,9 @@ class DashboardController extends GetxController {
     } else {
       if (brokerConnected.isFalse) {
         mqttController.initializeAndConnect(
-          hostName: "wss://test.smartnode.in/mqtt",
-          portNumber: 8084,
+          hostName: "ws://13.233.99.109/mqtt",
+          // hostName: 'wss://broker.emqx.io/mqtt',
+          portNumber: 8083,
           keepAliveTime: 10,
           clientId: clientIdController.text,
           username: usernameController.text,

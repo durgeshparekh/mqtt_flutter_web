@@ -104,6 +104,7 @@ class MQTTController {
   }
 
   Future subscribeToMQTT({required String topic}) async {
+    debugPrint('isconnectedToBroker: ${isConnectedToBroker()}');
     MqttSubscriptionStatus status =
         mqttBrowserClient!.getSubscriptionsStatus(topic);
     if (status == MqttSubscriptionStatus.doesNotExist) {
