@@ -32,6 +32,3 @@ iOS: https://cocoapods.org/pods/MQTTClient
 - Github: https://github.com/durgeshparekh
 - LinkedIn: https://www.linkedin.com/in/durgesh-parekh/
 - Instagram: https://www.instagram.com/durgesh_parekh96/
-
-# Support:
-- https://www.buymeacoffee.com/durgeshparekh
